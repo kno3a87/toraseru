@@ -28,6 +28,7 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   camera: ^0.9.4+16
+  image_gallery_saver: '^1.7.1'
   flutter:
     sdk: flutter
 
