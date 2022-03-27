@@ -5,20 +5,18 @@ import 'package:flutter/material.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 
 class CameraPage extends StatelessWidget {
-  const CameraPage({Key? key, required this.camera}) : super(key: key);
-  final CameraDescription camera;
+  const CameraPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Camera(camera: camera),
+    return const Scaffold(
+      body: Camera(),
     );
   }
 }
 
 class Camera extends StatefulWidget {
-  const Camera({Key? key, required this.camera}) : super(key: key);
-  final CameraDescription camera;
+  const Camera({Key? key}) : super(key: key);
 
   @override
   State<Camera> createState() => _CameraState();
@@ -27,17 +25,29 @@ class Camera extends StatefulWidget {
 class _CameraState extends State<Camera> {
   late CameraController _cameraController;
   XFile? imageFile;
+  late final List cameras;
+
+  Future<void> getCameras() async {
+    cameras = await availableCameras();
+    _cameraController = CameraController(
+      cameras.first,
+      ResolutionPreset.ultraHigh,
+      imageFormatGroup: ImageFormatGroup.bgra8888, // iOS
+    );
+  }
 
   @override
   void initState() {
     super.initState();
 
-    _cameraController = CameraController(
-      widget.camera,
-      ResolutionPreset.ultraHigh,
-      imageFormatGroup: ImageFormatGroup.bgra8888, // iOS
-    );
-    _cameraController.initialize();
+    getCameras().then((_) {
+      _cameraController.initialize().then((_) {
+        if (!mounted) {
+          return;
+        }
+        setState(() {});
+      });
+    });
   }
 
   @override
