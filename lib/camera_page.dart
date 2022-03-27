@@ -9,9 +9,7 @@ class CameraPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Camera(),
-    );
+    return const Camera();
   }
 }
 
